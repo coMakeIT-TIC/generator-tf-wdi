@@ -9,7 +9,7 @@ resource "kubectl_manifest" "kibana" {
         count: 1
         elasticsearchRef:
           name: quickstart
-        <%_ if (onCloud == "true") { _%>
+        <%_ if (onCloud) { _%>
         podTemplate:
             spec:
               affinity:
@@ -43,7 +43,7 @@ resource "kubectl_manifest" "kibana_lb" {
       kind: Service
       metadata:
         name: kibana-nlb
-        <%_ if (onCloud == "true") { _%>
+        <%_ if (onCloud) { _%>
         annotations:
           <%_ if (cloudProvider == "aws") { _%>
           service.beta.kubernetes.io/aws-load-balancer-type: external 
@@ -56,11 +56,11 @@ resource "kubectl_manifest" "kibana_lb" {
         <%_ } _%>
         namespace: default
       spec:
-        type: <%= onCloud ? 'NodePort' : 'LoadBalancer' %>
+        type: <%= !onCloud ? 'NodePort' : 'LoadBalancer' %>
         ports:
           - port: 5601
             targetPort: 5601
-        <%_ if (onCloud) { _%>
+        <%_ if (!onCloud) { _%>
             nodePort: 30301
         <%_ } _%> 
             name: http
@@ -74,7 +74,7 @@ resource "kubectl_manifest" "kibana_lb" {
   ]
 }
 
-<%_ if (!onCloud) { _%>
+<%_ if (onCloud) { _%>
 resource "null_resource" "print_kibana_loadBalancer_dns" {
   provisioner "local-exec" {
     command = <<-EOT

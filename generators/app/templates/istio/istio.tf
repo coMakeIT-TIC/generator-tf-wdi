@@ -26,7 +26,7 @@ resource "helm_release" "istiod" {
   force_update     = false
   depends_on       = [helm_release.istio-base]
 }
-<%_ if (onCloud == "true" && domain != "") { _%>
+<%_ if (onCloud && domain != "") { _%>
 resource "helm_release" "istio-ingressgateway" {
   repository      = local.istio_charts_url
   chart           = "gateway"
@@ -153,7 +153,7 @@ resource "null_resource" "kubectl" {
   depends_on = [
     helm_release.istio-base,
     helm_release.istiod,
-    <%_ if (onCloud == "true" && domain != "") { _%>
+    <%_ if (onCloud && domain != "") { _%>
     helm_release.istio-ingressgateway
     <%_ } _%>
   ]

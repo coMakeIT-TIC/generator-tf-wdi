@@ -41,11 +41,10 @@ module.exports = class extends Generator {
     };
 
     const options = JSON.parse(this.options);
-    options.onCloud =
+    options.onCloud = Boolean(
       options.cloudProvider !== undefined &&
-      options.cloudProvider !== "minikube"
-        ? "true"
-        : "false";
+        options.cloudProvider !== "minikube"
+    );
 
     this.log(options);
 

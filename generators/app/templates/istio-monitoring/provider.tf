@@ -1,4 +1,4 @@
-<%_ if (onCloud == "true") { _%>
+<%_ if (onCloud) { _%>
 terraform {
  required_providers {
 <%_ if (cloudProvider == "aws") { _%>

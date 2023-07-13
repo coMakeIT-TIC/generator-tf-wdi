@@ -1,4 +1,4 @@
-<%_ if (onCloud == "true") { _%>
+<%_ if (onCloud) { _%>
 variable "cluster_name" {
   type    = string
   default = <%- "\""+clusterName+"\"" %>
